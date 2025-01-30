@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Bulk Number Validator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Proxima+Nova:wght@400;500;600&display=swap');
+        body {
+            font-family: 'Proxima Nova', sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 20px;
+        }
+        .main-content {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #343a40;
+        }
+        .file-upload {
+            border: 2px dashed #ced4da;
+            padding: 20px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: #6c757d;
+            background: #e9ecef;
+        }
+        .progress-bar {
+            width: 100%;
+            background: #e9ecef;
+            height: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: #28a745;
+            transition: width 0.5s;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+        .buttons button {
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .buttons button.start {
+            background: #28a745;
+            color: white;
+        }
+        .buttons button.start:hover {
+            background: #218838;
+        }
+        .buttons button.pause {
+            background: #ffc107;
+            color: white;
+        }
+        .buttons button.pause:hover {
+            background: #e0a800;
+        }
+        .buttons button.stop {
+            background: #dc3545;
+            color: white;
+        }
+        .buttons button.stop:hover {
+            background: #c82333;
+        }
+        .logs {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            height: 200px;
+            overflow-y: auto;
+            color: #495057;
+            margin-bottom: 20px;
+        }
+        .sidebar {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .chart {
+            width: 100%;
+            height: 250px;
+            margin-bottom: 20px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <h1>WhatsApp Bulk Number Validator</h1>
+            
+            <div class="file-upload" onclick="document.getElementById('fileInput').click();">
+                <p>Drag and drop CSV/Excel file here or click to browse</p>
+            </div>
+            <input type="file" id="fileInput" style="display: none;">
+            
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            
+            <div class="buttons">
+                <button class="start" onclick="startValidation()">Start</button>
+                <button class="pause" onclick="pauseValidation()">Pause</button>
+                <button class="stop" onclick="stopValidation()">Stop</button>
+            </div>
+            
+            <h3>Validation Logs</h3>
+            <div class="logs" id="logs">
+                <p>No logs yet...</p>
+            </div>
+        </div>
+        <div class="sidebar">
+            <h3>Validation Statistics</h3>
+            <canvas class="chart" id="validationChart"></canvas>
+            <ul>
+                <li><strong>Success Ratio:</strong> <span id="successRatio">0%</span></li>
+                <li><strong>Failure Ratio:</strong> <span id="failureRatio">0%</span></li>
+                <li><strong>Total Numbers:</strong> <span id="totalNumbers">0</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('validationChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Success', 'Failure'],
+                datasets: [{
+                    label: 'Validation Ratios',
+                    data: [0, 0],
+                    backgroundColor: ['#28a745', '#dc3545']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        function updateChart(success, failure) {
+            chart.data.datasets[0].data = [success, failure];
+            chart.update();
+        }
+
+        function startValidation() {
+            let progress = document.getElementById('progress');
+            progress.style.width = '100%';
+            let logs = document.getElementById('logs');
+            logs.innerHTML += '<p>Validation started...</p>';
+            updateChart(70, 30); // Example values
+            document.getElementById('successRatio').innerText = '70%';
+            document.getElementById('failureRatio').innerText = '30%';
+            document.getElementById('totalNumbers').innerText = '100';
+        }
+        
+        function pauseValidation() {
+            let logs = document.getElementById('logs');
+            logs.innerHTML += '<p>Validation paused.</p>';
+        }
+
+        function stopValidation() {
+            let progress = document.getElementById('progress');
+            progress.style.width = '0%';
+            let logs = document.getElementById('logs');
+            logs.innerHTML += '<p>Validation stopped.</p>';
+        }
+    </script>
+</body>
+</html>
