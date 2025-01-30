@@ -171,6 +171,71 @@
         logs.innerHTML += '<p>Validation stopped.</p>';
     }
 </script>
+    <script>
+    function startValidation() {
+        let progress = document.getElementById('progress');
+        let logs = document.getElementById('logs');
+        let successRatio = document.getElementById('successRatio');
+        let failureRatio = document.getElementById('failureRatio');
+        let totalNumbers = document.getElementById('totalNumbers');
+
+        // Simulate processing
+        progress.style.width = '100%';
+        logs.innerHTML += '<p>✅ Validation started...</p>';
+
+        // Simulate results
+        let successCount = Math.floor(Math.random() * 100);
+        let failureCount = 100 - successCount;
+
+        successRatio.innerText = successCount + '%';
+        failureRatio.innerText = failureCount + '%';
+        totalNumbers.innerText = '100';
+
+        // Update Chart
+        updateChart(successCount, failureCount);
+    }
+
+    function pauseValidation() {
+        let logs = document.getElementById('logs');
+        logs.innerHTML += '<p>⏸️ Validation paused.</p>';
+    }
+
+    function stopValidation() {
+        let progress = document.getElementById('progress');
+        let logs = document.getElementById('logs');
+
+        progress.style.width = '0%';
+        logs.innerHTML += '<p>❌ Validation stopped.</p>';
+    }
+
+    // Chart.js Integration
+    const ctx = document.getElementById('validationChart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Success', 'Failure'],
+            datasets: [{
+                data: [0, 0],
+                backgroundColor: ['#28a745', '#dc3545']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+
+    function updateChart(success, failure) {
+        chart.data.datasets[0].data = [success, failure];
+        chart.update();
+    }
+</script>
+
 </body>
 </html>
 
