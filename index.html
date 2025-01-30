@@ -153,3 +153,24 @@
     </div>
 </body>
 </html>
+<script>
+    function startValidation() {
+        let progress = document.getElementById('progress');
+        progress.style.width = '100%';
+        let logs = document.getElementById('logs');
+        logs.innerHTML += '<p>Validation started...</p>';
+    }
+
+    function pauseValidation() {
+        let logs = document.getElementById('logs');
+        logs.innerHTML += '<p>Validation paused.</p>';
+    }
+
+    function stopValidation() {
+        let progress = document.getElementById('progress');
+        progress.style.width = '0%';
+        let logs = document.getElementById('logs');
+        logs.innerHTML += '<p>Validation stopped.</p>';
+    }
+</script>
+
